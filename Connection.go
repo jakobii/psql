@@ -1,10 +1,7 @@
 package psql
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
-
 	_ "github.com/lib/pq" // comment
 )
 
@@ -29,72 +26,72 @@ func (c Connection) String() string {
 }
 
 // Column represents a sql tables column configuration.
-type Column struct {
-	Name         string
-	Position     int
-	Type         string
-	Nullable     bool
-	Key          bool
-	Unique       bool
-	Default      string
-	CharacterSet string
-	Percision    int
-	Scale        int
-	Length       int
-}
+//type Column struct {
+//	Name         string
+//	Position     int
+//	Type         string
+//	Nullable     bool
+//	Key          bool
+//	Unique       bool
+//	Default      string
+//	CharacterSet string
+//	Percision    int
+//	Scale        int
+//	Length       int
+//}
 
 // GetColumns gets a tables column configuration.
-func GetColumns(c Connection, schema, table string) ([]Column, error) {
-
-	// open db
-	db, err := sql.Open("postgres", c.String())
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	// generate sql
-	query := fmt.Sprintf(
-		sqlGetColumns,
-		Escape(schema),
-		Escape(table),
-	)
-
-	// exec sql
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	// build return object
-	var columns = make([]Column, 1)
-	for rows.Next() {
-		var col Column
-		err := rows.Scan(
-			&col.Name,
-			&col.Position,
-			&col.Type,
-			&col.Nullable,
-			&col.Key,
-			&col.Unique,
-			&col.Default,
-			&col.CharacterSet,
-			&col.Percision,
-			&col.Scale,
-			&col.Length,
-		)
-		if err != nil {
-			return nil, err
-		}
-		columns = append(columns, col)
-	}
-	err = rows.Err()
-	if err != nil {
-		return nil, err
-	}
-	return columns, nil
-}
+//func GetColumns(c Connection, schema, table string) ([]Column, error) {
+//
+//	// open db
+//	db, err := sql.Open("postgres", c.String())
+//	if err != nil {
+//		return nil, err
+//	}
+//	defer db.Close()
+//
+//	// generate sql
+//	query := fmt.Sprintf(
+//		sqlGetColumns,
+//		Escape(schema),
+//		Escape(table),
+//	)
+//
+//	// exec sql
+//	rows, err := db.Query(query)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	defer rows.Close()
+//
+//	// build return object
+//	var columns = make([]Column, 1)
+//	for rows.Next() {
+//		var col Column
+//		err := rows.Scan(
+//			&col.Name,
+//			&col.Position,
+//			&col.Type,
+//			&col.Nullable,
+//			&col.Key,
+//			&col.Unique,
+//			&col.Default,
+//			&col.CharacterSet,
+//			&col.Percision,
+//			&col.Scale,
+//			&col.Length,
+//		)
+//		if err != nil {
+//			return nil, err
+//		}
+//		columns = append(columns, col)
+//	}
+//	err = rows.Err()
+//	if err != nil {
+//		return nil, err
+//	}
+//	return columns, nil
+//}
 
 //// Query performs a tsql query and returns the results if any.
 //func Query(conn Connection, query string) ([]map[string]interface{}, error) {

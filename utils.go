@@ -1,6 +1,7 @@
 package psql
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
@@ -9,9 +10,48 @@ import (
 	"github.com/google/uuid"
 )
 
+
+
+
+// TableName constructs a full qualified sql table name
+// database and schema will be omitted if left blank
+func TableName(database, schema, table string) string {
+	var sql bytes.Buffer
+	if database != "" && schema != "" {
+		sql.WriteString( database + `.`)
+	}
+	if schema != "" {
+		sql.WriteString(schema + `.`)
+	}
+	sql.WriteString(table)
+	return sql.String()
+}
+
+func CAST(val, typ string) string {
+	return `CAST(` + AS(val,typ) + `)`
+}
+
+func AS(val, name string) string {
+	return val + ` AS ` + name
+}
+
+func AND(values ...string) string {
+	return strings.Join(values, ` AND `)
+}
+
+func OR(values ...string) string {
+	return strings.Join(values, ` OR `)
+}
+
 // Escape escapes sql string values.
-func Escape(x string) string {
+func EscapeString(x string) string {
 	return strings.ReplaceAll(x, "'", "''")
+}
+
+// Identifier escapes a resource name. e.g. column, table, schema, and database names
+func Identifier(x string) string {
+	i := strings.ReplaceAll(x, `"`, `""`)
+	return `"` + i + `"`
 }
 
 func s(x string) string {
@@ -30,7 +70,7 @@ type Psqler func(interface{}) string
 
 // String returns escaped sql string expression.
 // can be used on all string data types.
-func String(i interface{}) string {
+func Text(i interface{}) string {
 	var o string
 	switch i.(type) {
 	case string:
@@ -83,7 +123,7 @@ func Number(i interface{}) string {
 	case nil:
 		o = `NULL`
 	default:
-		o = String(i)
+		o = Text(i)
 	}
 	return o
 }
