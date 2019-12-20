@@ -16,9 +16,9 @@ func TestSelect(t *testing.T) {
 
 		// columns
 		[]string{
-			AS(Identifier(`id`), Identifier(`ID`)),
-			AS(Identifier(`fn`), Identifier(`FirstName`)),
-			AS(Identifier(`ln`), Identifier(`LastName`)),
+			As(Identifier(`id`), Identifier(`ID`)),
+			As(Identifier(`fn`), Identifier(`FirstName`)),
+			As(Identifier(`ln`), Identifier(`LastName`)),
 		},
 
 		// table
@@ -29,13 +29,13 @@ func TestSelect(t *testing.T) {
 		),
 
 		// where
-		AND(
+		And(
 			Where(
 				map[string]string{
 					Identifier("fn"): Text("Jac%"),
 					Identifier("ln"): Text("?choa"),
 				},
-				LIKE,
+				Like,
 				false,
 				true,
 			),

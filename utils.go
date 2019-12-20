@@ -27,21 +27,15 @@ func TableName(database, schema, table string) string {
 	return sql.String()
 }
 
-func CAST(val, typ string) string {
+func Cast(val, typ string) string {
 	return `CAST(` + AS(val,typ) + `)`
 }
 
-func AS(val, name string) string {
+func As(val, name string) string {
 	return val + ` AS ` + name
 }
 
-func AND(values ...string) string {
-	return strings.Join(values, ` AND `)
-}
 
-func OR(values ...string) string {
-	return strings.Join(values, ` OR `)
-}
 
 // Escape escapes sql string values.
 func EscapeString(x string) string {
@@ -56,6 +50,11 @@ func Identifier(x string) string {
 
 func s(x string) string {
 	return strings.ReplaceAll(x, "'", "''")
+}
+
+// Expression wraps an expression in parentheses
+func Expression(x string) string {
+	return e(x)
 }
 
 // Expr convert string to sql expression.
